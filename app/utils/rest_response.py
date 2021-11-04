@@ -1,9 +1,12 @@
+import json
 import time
 
-from flask import Response, jsonify
+from flask import Response
 
 
-def created(data, message="", status=201, headers=None, mimetype='application/json', content_type='application/json'):
-    rest = {"data": data, "status": status, "timestamp": int(round(time.time() * 1000)), "message": message}
-    # return Response(rest, status=status, headers=headers, mimetype=mimetype, content_type=content_type)
-    return jsonify(rest)
+def build_response(data, code=200, http_status=200, message="Success"):
+    if data is None:
+        data = {}
+    rest = {"code": code, "timestamp": int(round(time.time() * 1000)), "message": message, "data": data}
+    response = Response(json.dumps(rest), http_status)
+    return response

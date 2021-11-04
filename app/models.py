@@ -1,3 +1,5 @@
+import datetime
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
@@ -12,6 +14,16 @@ class User(db.Model):
     email = db.Column(db.String(60), index=True, unique=True)
     username = db.Column(db.String(60), index=True)
     password_hash = db.Column(db.String(128))
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    last_update_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+
+    @staticmethod
+    def create(username, raw_password, email):
+        password_hash = generate_password_hash(raw_password)
+        user = User(username=username, password_hash=password_hash, email=email)
+        db.session.add(user)
+        db.session.commit()
+        return user
 
     @property
     def password(self):
@@ -34,4 +46,6 @@ class User(db.Model):
         return check_password_hash(self.password_hash, raw_password)
 
     def __repr__(self):
-        return '<User: {}>'.format(self.username)
+        return {'id': self.id, 'email': self.email,
+                'username': self.username, 'password_hash': self.password_hash,
+                'create_time': self.create_time, 'last_update_time': self.last_update_time}
