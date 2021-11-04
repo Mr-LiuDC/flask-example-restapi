@@ -1,0 +1,9 @@
+### 添加用户信息
+POST http://127.0.0.1:5000/api/user
+Content-Type: application/json
+
+{
+  "username": "Tom",
+  "password": "123456"
+}
+

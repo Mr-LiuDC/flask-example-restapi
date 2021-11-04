@@ -1,8 +1,12 @@
 import os
 
 from flask import Flask
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 from config import app_config
+
+db = SQLAlchemy()
 
 
 def create_app(config_name='development'):
@@ -17,7 +21,15 @@ def create_app(config_name='development'):
         app.config.from_object(app_config[config_name])
         app.config.from_pyfile('config.py')
 
+    db.init_app(app)
+
+    Migrate(app, db)
+
+    from app import models
+
     from .api.index import index as index_blueprint
     app.register_blueprint(index_blueprint)
+    from .api.user import user as user_blueprint
+    app.register_blueprint(user_blueprint)
 
     return app
