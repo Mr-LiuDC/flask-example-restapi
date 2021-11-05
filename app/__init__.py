@@ -4,6 +4,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+from app.utils.rest_response import CustomJSONEncoder
 from config import app_config
 
 db = SQLAlchemy()
@@ -31,5 +32,7 @@ def create_app(config_name='development'):
     app.register_blueprint(index_blueprint)
     from .api.user import user as user_blueprint
     app.register_blueprint(user_blueprint)
+
+    app.json_encoder = CustomJSONEncoder
 
     return app

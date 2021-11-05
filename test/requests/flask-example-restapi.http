@@ -8,3 +8,6 @@ Content-Type: application/json
   "email": "tom@example.com"
 }
 
+### 查询用户信息
+GET http://127.0.0.1:5000/api/user/1
+Content-Type: application/json
