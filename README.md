@@ -35,11 +35,17 @@ pip freeze > requirements.txt
 初始化数据库
 
 ```bash
+# 数据库初始化
 flask db init
+# 数据库迁移
 flask db migrate
 # 或者添加备注信息
 flask db migrate -m "Initial migration"
+# 数据库升级
 flask db upgrade
+
+# 查看版本历史
 flask db history
+# 数据库降级
 flask db downgrade 版本号
 ```
