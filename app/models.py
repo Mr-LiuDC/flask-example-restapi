@@ -1,5 +1,6 @@
 import datetime
 
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
@@ -10,7 +11,7 @@ class User(db.Model):
     用户数据表
     """
     __tablename__ = 'sys_user'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(60), index=True, unique=True)
     username = db.Column(db.String(60), index=True)
     password_hash = db.Column(db.String(128))
@@ -45,14 +46,7 @@ class User(db.Model):
         """
         return check_password_hash(self.password_hash, raw_password)
 
-    def __repr__(self):
-        return {'id': self.id, 'email': self.email,
-                'username': self.username, 'password_hash': self.password_hash,
-                'create_time': self.create_time, 'last_update_time': self.last_update_time}
 
-    @staticmethod
-    def keys():
-        return ['id', 'email', 'username', 'password_hash', 'create_time', 'last_update_time']
-
-    def __getitem__(self, item):
-        return getattr(self, item)
+class UserSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = User

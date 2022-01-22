@@ -1,13 +1,14 @@
 import os
 
 from flask import Flask
+from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from app.utils.rest_response import CustomJSONEncoder
 from config import app_config
 
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 def create_app(config_name='development'):
@@ -26,13 +27,13 @@ def create_app(config_name='development'):
 
     Migrate(app, db)
 
+    ma.init_app(app)
+
     from app import models
 
     from .api.index import index as index_blueprint
     app.register_blueprint(index_blueprint)
     from .api.user import user as user_blueprint
     app.register_blueprint(user_blueprint)
-
-    app.json_encoder = CustomJSONEncoder
 
     return app
